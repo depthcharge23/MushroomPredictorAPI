@@ -6,7 +6,7 @@ svm.train()
 
 app = Flask(__name__)
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict-mushroom', methods=['POST'])
 def home():
     data = request.get_json()
 
