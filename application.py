@@ -6,10 +6,6 @@ svm.train()
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def home():
-    return 'Hello World!'
-
 @app.route('/predict-mushroom', methods=['POST'])
 def predict_mushroom():
     data = request.get_json()
