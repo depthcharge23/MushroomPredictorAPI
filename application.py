@@ -20,7 +20,4 @@ def predict_mushroom():
         'confidence': svm.confidence,
         'prediction': int(prediction[0])
     })
-
-if __name__ == '__main__':
-    app.run()
     
