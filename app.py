@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from Mushroom_SVM import Mushroom_SVM
 
 svm = Mushroom_SVM()
@@ -17,3 +17,11 @@ def predict_mushroom():
         'prediction': int(prediction[0])
     })
     
+@app.route('/get-graph', methods=['POST'])
+def get_graph():
+    graph_type = request.get_json()['imageType']
+    image = svm.get_graph(graph_type)
+
+    return jsonify({
+        'image': image
+    })
