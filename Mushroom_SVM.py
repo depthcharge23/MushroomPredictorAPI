@@ -78,7 +78,7 @@ class Mushroom_SVM:
                 plt.legend(x_labels)
                 plt.title(prop.capitalize())
 
-                fig.save(fig_data, format='png')
+                fig.savefig(fig_data, format='png')
 
         elif (graph_type == 'bar'):
             if prop != '':
@@ -102,7 +102,7 @@ class Mushroom_SVM:
 
                 plt.title(prop.capitalize())
 
-                fig.save(fig_data, format='png')
+                fig.savefig(fig_data, format='png')
         
         return base64.b64encode(fig_data.getvalue()).decode('utf-8').replace('\n', '')
         
