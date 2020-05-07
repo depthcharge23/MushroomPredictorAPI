@@ -19,8 +19,10 @@ def predict_mushroom():
     
 @app.route('/get-graph', methods=['POST'])
 def get_graph():
-    graph_type = request.get_json()['imageType']
-    image = svm.get_graph(graph_type)
+    graph_type = request.get_json()['graphType']
+    prop = request.get_json()['prop']
+    
+    image = svm.get_graph(graph_type, prop)
 
     return jsonify({
         'image': image
