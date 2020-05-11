@@ -1,5 +1,10 @@
 class Mushroom_Map:
     data = {
+        'class': {
+            0: ['Poisonous', 'Edible'],
+            1: 'Poisonous',
+            2: 'Edible'
+        },
         'cap-shape': {
             0: ['Bell', 'Conical', 'Convex', 'Flat', 'Knobbed', 'Sunken'],
             1: 'Bell',
