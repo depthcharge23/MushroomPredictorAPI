@@ -50,8 +50,6 @@ class Mushroom_SVM:
             poisonous_freq = len(df[df['class'] == 1]) / len(df) * 100
             edible_freq = len(df[df['class'] == 2]) / len(df) * 100
 
-            fig = plt.figure(figsize=(5, 4))
-
             freqs = [poisonous_freq, edible_freq]
 
             plt.pie(freqs, autopct='%0.2f%%')
@@ -72,7 +70,6 @@ class Mushroom_SVM:
                 for val in column_vals:
                     freqs.append(len(df[df[prop] == val]) / len(df) * 100)
 
-                plt.figure(figsize=(1, 1))
                 plt.pie(freqs, autopct='%0.2f%%')
                 plt.axis('equal')
                 plt.legend(x_labels)
@@ -97,12 +94,11 @@ class Mushroom_SVM:
                 ax = plt.subplot()
                 ax.set_xticks(range(len(x_vals)))
                 ax.set_xticklabels(x_labels)
-                ax.set_xlabel(prop.capitalize() + ' Types')
-                ax.set_ylabel('Amount of Mushrooms')
+                # ax.set_xlabel(prop.capitalize() + ' Types')
+                # ax.set_ylabel('Amount of Mushrooms')
 
                 plt.title(prop.capitalize())
 
                 fig.savefig(fig_data, format='png')
         
         return base64.b64encode(fig_data.getvalue()).decode('utf-8').replace('\n', '')
-        
