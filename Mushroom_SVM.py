@@ -36,7 +36,7 @@ class Mushroom_SVM:
     def predict(self, sample):
         return self.clf.predict(np.array([sample]))
 
-    def get_graph(self, graph_type='basic', prop=''):
+    def get_graph(self, graph_type='pie', prop='class'):
         mushrooms = list(mushroom_db.find())
         df = pd.DataFrame(mushrooms)
         mm = Mushroom_Map().data
@@ -44,22 +44,7 @@ class Mushroom_SVM:
         fig = plt.figure(figsize=(5, 4))
         fig_data = BytesIO()
 
-        if (graph_type == 'basic'):
-            categories = ['Poisonous', 'Edible']
-
-            poisonous_freq = len(df[df['class'] == 1]) / len(df) * 100
-            edible_freq = len(df[df['class'] == 2]) / len(df) * 100
-
-            freqs = [poisonous_freq, edible_freq]
-
-            plt.pie(freqs, autopct='%0.2f%%')
-            plt.axis('equal')
-            plt.legend(categories)
-            plt.title('Edible VS Poisonous')
-
-            fig.savefig(fig_data, format='png')
-
-        elif (graph_type == 'pie'):
+        if (graph_type == 'pie'):
             if prop != '':
                 prop_map = mm[prop]
                 column_vals = sorted(df[prop].unique())
@@ -94,8 +79,6 @@ class Mushroom_SVM:
                 ax = plt.subplot()
                 ax.set_xticks(range(len(x_vals)))
                 ax.set_xticklabels(x_labels)
-                # ax.set_xlabel(prop.capitalize() + ' Types')
-                # ax.set_ylabel('Amount of Mushrooms')
 
                 plt.title(prop.capitalize())
 
