@@ -72,7 +72,7 @@ class Mushroom_SVM:
                 for val in column_vals:
                     freqs.append(len(df[df[prop] == val]) / len(df) * 100)
 
-                plt.figure(figsize=(5, 4))
+                plt.figure(figsize=(1, 1))
                 plt.pie(freqs, autopct='%0.2f%%')
                 plt.axis('equal')
                 plt.legend(x_labels)
