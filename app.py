@@ -2,12 +2,12 @@ from flask import Flask, jsonify, request, send_file
 from Mushroom_SVM import Mushroom_SVM
 import pyodbc
 
-server = 'mushroom-predictor.database.windows.net'
+server = 'tcp:mushroom-predictor.database.windows.net,1433'
 database = 'mushroom-predictor'
 username = 'ammathews'
 password = '22ilbbid!4274'
 driver = '{ODBC Driver 17 for SQL Server}'
-cnxn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password + ';TRUSTED_CONNECTION=yes;')
+cnxn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password + ';ENCRYPT=yes;TRUSTSERVERCERTIFICAT=no;CONNECTIONTIMEOUT=30;')
 cursor = cnxn.cursor()
 
 svm = Mushroom_SVM()
@@ -43,10 +43,19 @@ def get_user():
     password = request.get_json()['password']
 
     try:
-        cursor.execute('SELECT COUNT(*) AS row FROM dbo.USERS u WHERE u.USER_NAME = ' + username + ' AND u.PASSWORD = ' + password)
-        data = cursor.fetchone()
-        print(data)
-    except:
-        print('error')
+        cursor.execute('SELECT COUNT(*) AS row FROM dbo.USERS u WHERE u.USER_NAME = \'' + username + '\' AND u.PASSWORD = \'' + password + '\'')
+        data = int(cursor.fetchone()[0])
+        
+        if data > 0:
+            return jsonify({
+                'status': 'valid'
+            })
+        else:
+            return jsonify({
+                'status': 'invalid'
+            })
 
-    return 'nice'
+    except:
+        return jsonify({
+            'status': 'error'
+        })
