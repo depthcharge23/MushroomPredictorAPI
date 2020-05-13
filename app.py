@@ -1,14 +1,11 @@
 from flask import Flask, jsonify, request, send_file
 from Mushroom_SVM import Mushroom_SVM
-import pyodbc
+from pymongo import MongoClient
 
-server = 'tcp:mushroom-predictor.database.windows.net,1433'
-database = 'mushroom-predictor'
-username = 'ammathews'
-password = '22ilbbid!4274'
-driver = '{ODBC Driver 17 for SQL Server}'
-cnxn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password + ';ENCRYPT=yes;TRUSTSERVERCERTIFICAT=no;CONNECTIONTIMEOUT=30;')
-cursor = cnxn.cursor()
+uri = "mongodb://mushroom-predictor:ZkoVuLdDDPS0gwI8zn4zMgjFRqMZyKKTwfYs94LOPcAnP69VB2kWjyE7OxXns4omwzbIreZPgtX8KmNrNde4JQ==@mushroom-predictor.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@mushroom-predictor@&retrywrites=false"
+client = MongoClient(uri, ssl=True)
+db = client.Users
+users_db = db.Users
 
 svm = Mushroom_SVM()
 svm.train()
@@ -43,10 +40,12 @@ def get_user():
     password = request.get_json()['password']
 
     try:
-        cursor.execute('SELECT COUNT(*) AS row FROM dbo.USERS u WHERE u.USER_NAME = \'' + username + '\' AND u.PASSWORD = \'' + password + '\'')
-        data = int(cursor.fetchone()[0])
+        users = list(users_db.find({
+            'username': username,
+            'password': password
+        }))
         
-        if data > 0:
+        if len(users) > 0:
             return jsonify({
                 'status': 'valid'
             })
