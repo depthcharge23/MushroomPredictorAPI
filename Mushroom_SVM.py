@@ -78,7 +78,7 @@ class Mushroom_SVM:
 
                 ax = plt.subplot()
                 ax.set_xticks(range(len(x_vals)))
-                ax.set_xticklabels(x_labels)
+                ax.set_xticklabels(x_labels, rotation=50)
 
                 plt.title(prop.capitalize())
 
