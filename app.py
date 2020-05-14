@@ -58,3 +58,9 @@ def get_user():
         return jsonify({
             'status': 'error'
         })
+
+@app.route('/map-data', methods=['POST'])
+def map_data():
+    prop = request.get_json()['prop']
+
+    return jsonify(svm.map_data(prop))

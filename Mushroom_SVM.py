@@ -85,3 +85,30 @@ class Mushroom_SVM:
                 fig.savefig(fig_data, format='png')
         
         return base64.b64encode(fig_data.getvalue()).decode('utf-8').replace('\n', '')
+
+    def map_data(self, prop):
+        mushrooms = list(mushroom_db.find())
+        df = pd.DataFrame(mushrooms)
+        mm = Mushroom_Map().data
+
+        class_map = mm['class']
+        prop_map = mm[prop]
+
+        data = df[[prop, 'class']]
+
+        p_or_e = {}
+        for i in range(1, len(data)):
+            row = data.iloc[i]
+            prop_val = prop_map[row[0]]
+            class_val = class_map[row[1]]
+
+            try:
+                x = p_or_e[prop_val]
+                try:
+                    x.index(class_val)
+                except:
+                    x.append(class_val)
+            except:
+                p_or_e[prop_val] = [class_val]
+
+        return p_or_e
