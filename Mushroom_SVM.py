@@ -112,3 +112,21 @@ class Mushroom_SVM:
                 p_or_e[prop_val] = [class_val]
 
         return p_or_e
+
+    def heat_map_data(self, prop):
+        mushrooms = list(mushroom_db.find())
+        df = pd.DataFrame(mushrooms)
+        mm = Mushroom_Map().data
+
+        class_map = mm['class']
+        prop_map = mm[prop]
+
+        heat_map = {}
+        for i in range(1, len(prop_map.keys())):
+            p_and_e_pert = {}
+            for j in range(1, len(class_map.keys())):
+                p_and_e_pert[class_map[j]] = len(df[(df[prop] == i) & (df['class'] == j)]) / len(df[df[prop] == i]) * 100
+
+            heat_map[prop_map[i]] = p_and_e_pert            
+                
+        return heat_map

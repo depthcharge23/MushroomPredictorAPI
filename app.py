@@ -64,3 +64,9 @@ def map_data():
     prop = request.get_json()['prop']
 
     return jsonify(svm.map_data(prop))
+
+@app.route('/heat-map-data', methods=['POST'])
+def heat_map_data():
+    prop = request.get_json()['prop']
+
+    return jsonify(svm.heat_map_data(prop))
