@@ -135,7 +135,7 @@ class Mushroom_SVM:
         fig = plt.figure(figsize=(7,4))
         fig_data = BytesIO()
 
-        sns.heatmap(heat_df, linewidths=.5, square=True)
+        sns.heatmap(heat_df, linewidths=.5)
         plt.yticks(rotation=0)
 
         fig.savefig(fig_data, format='png')
