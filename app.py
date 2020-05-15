@@ -69,4 +69,8 @@ def map_data():
 def heat_map_data():
     prop = request.get_json()['prop']
 
-    return jsonify(svm.heat_map_data(prop))
+    image = svm.heat_map_data(prop)
+
+    return jsonify({
+        'image': image
+    })

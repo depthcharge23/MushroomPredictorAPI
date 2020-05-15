@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from Mushroom_Map import Mushroom_Map
+import seaborn as sns
 
 uri = "mongodb://mushroom-predictor:ZkoVuLdDDPS0gwI8zn4zMgjFRqMZyKKTwfYs94LOPcAnP69VB2kWjyE7OxXns4omwzbIreZPgtX8KmNrNde4JQ==@mushroom-predictor.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@mushroom-predictor@&retrywrites=false"
 client = MongoClient(uri, ssl=True)
@@ -122,11 +123,22 @@ class Mushroom_SVM:
         prop_map = mm[prop]
 
         heat_map = {}
-        for i in range(1, len(prop_map.keys())):
+        for i in range(1, len(class_map.keys())):
             p_and_e_pert = {}
-            for j in range(1, len(class_map.keys())):
-                p_and_e_pert[class_map[j]] = len(df[(df[prop] == i) & (df['class'] == j)]) / len(df[df[prop] == i]) * 100
+            for j in range(1, len(prop_map.keys())):
+                p_and_e_pert[prop_map[j]] = len(df[(df[prop] == j) & (df['class'] == i)]) / len(df[df[prop] == j]) * 100
 
-            heat_map[prop_map[i]] = p_and_e_pert            
-                
-        return heat_map
+            heat_map[class_map[i]] = p_and_e_pert       
+
+        heat_df = pd.DataFrame(heat_map)    
+        
+        fig = plt.figure(figsize=(7,4))
+        fig_data = BytesIO()
+
+        sns.heatmap(heat_df, linewidths=.5, square=True)
+        plt.yticks(rotation=0)
+
+        fig.savefig(fig_data, format='png')
+
+        return base64.b64encode(fig_data.getvalue()).decode('utf-8').replace('\n', '')
+        
