@@ -9,10 +9,18 @@ import base64
 from Mushroom_Map import Mushroom_Map
 import seaborn as sns
 
-uri = "mongodb://mushroom-predictor:ZkoVuLdDDPS0gwI8zn4zMgjFRqMZyKKTwfYs94LOPcAnP69VB2kWjyE7OxXns4omwzbIreZPgtX8KmNrNde4JQ==@mushroom-predictor.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@mushroom-predictor@&retrywrites=false"
-client = MongoClient(uri, ssl=True)
-db = client.MushroomPredictor
-mushroom_db = db.Mushroom
+mushroom_db = None
+
+try:
+    uri = "mongodb://mushroom-predictor:ZkoVuLdDDPS0gwI8zn4zMgjFRqMZyKKTwfYs94LOPcAnP69VB2kWjyE7OxXns4omwzbIreZPgtX8KmNrNde4JQ==@mushroom-predictor.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@mushroom-predictor@&retrywrites=false"
+    client = MongoClient(uri, ssl=True)
+    db = client.MushroomPredictor
+    mushroom_db = db.Mushroom
+
+    print('\nSuccessful MongoDB connection to the Mushroom collection...')
+except:
+    print('\nAn error occurred when connecting to the Mushroom MongoDB collection...')
+    raise Exception('MongoDB error')
 
 class Mushroom_SVM:
     def __init__(self):
@@ -38,7 +46,12 @@ class Mushroom_SVM:
         return self.clf.predict(np.array([sample]))
 
     def get_graph(self, graph_type='pie', prop='class'):
-        mushrooms = list(mushroom_db.find())
+        try:
+            mushrooms = list(mushroom_db.find())
+        except:
+            print('\nAn internal occurred when calling the MongoDB Mushroom collection...')
+            raise Exception('MongoDB error')
+
         df = pd.DataFrame(mushrooms)
         mm = Mushroom_Map().data
 
@@ -48,6 +61,7 @@ class Mushroom_SVM:
         if (graph_type == 'pie'):
             if prop != '':
                 prop_map = mm[prop]
+
                 column_vals = sorted(df[prop].unique())
 
                 freqs = []
@@ -84,11 +98,20 @@ class Mushroom_SVM:
                 plt.title(prop.capitalize())
 
                 fig.savefig(fig_data, format='png')
+
+        else:
+            print('\nThe following graph type is not a valid option: ' + graph_type)
+            raise Exception('Invalid graphy type error')
         
         return base64.b64encode(fig_data.getvalue()).decode('utf-8').replace('\n', '')
 
     def map_data(self, prop):
-        mushrooms = list(mushroom_db.find())
+        try:
+            mushrooms = list(mushroom_db.find())
+        except:
+            print('\nAn internal occurred when calling the MongoDB Mushroom collection...')
+            raise Exception('MongoDB error')
+
         df = pd.DataFrame(mushrooms)
         mm = Mushroom_Map().data
 
@@ -115,7 +138,12 @@ class Mushroom_SVM:
         return p_or_e
 
     def heat_map_data(self, prop):
-        mushrooms = list(mushroom_db.find())
+        try:
+            mushrooms = list(mushroom_db.find())
+        except:
+            print('\nAn internal occurred when calling the MongoDB Mushroom collection...')
+            raise Exception('MongoDB error')
+
         df = pd.DataFrame(mushrooms)
         mm = Mushroom_Map().data
 
