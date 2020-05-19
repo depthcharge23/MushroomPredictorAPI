@@ -42,14 +42,14 @@ def predict_mushroom():
     try:
         prediction = svm.predict(data)
 
-        print('Successful mushroom prediction for data: ' + data)
+        print('Successful mushroom prediction for data: ' + str(data))
         return jsonify({
             'confidence': svm.confidence,
             'prediction': int(prediction[0])
         })
     except:
         print('\nAn error occurred when running the SVM prediction...')
-        print('Data that caused error: \n' + data)
+        print('Data that caused error: \n' + str(data))
         
         return jsonify({
             'error': 'An internal error occurred...'
