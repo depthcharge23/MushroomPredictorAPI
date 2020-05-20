@@ -1,3 +1,17 @@
+"""
+    Mushroom_Map.py was created to store each mushroom property and its stored value and user friendly value.
+
+    The top level of the map is the property of the mushroom. The next level is the stored value as a key, and
+    the user friendly value as a value. Key "0" for each object is a list of the user friendly values to save computation
+    time from having to generate lists of the user friendly values.
+
+    Author:
+        Aaron M. Mathews
+    
+    Date:
+        5/19/2020
+"""
+
 class Mushroom_Map:
     data = {
         'class': {
